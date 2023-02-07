@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.AM.controller.ArticleController;
+import com.KoreaIT.java.AM.controller.Controller;
 import com.KoreaIT.java.AM.controller.MemberController;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
@@ -42,33 +43,29 @@ public class App {
 				break;
 			}
 			
-			if (cmd.equals("member join")) {
-				
-				memberController.doJoin();
+			String[] cmdBits = cmd.split(" "); // article detail
 
-			} else if (cmd.equals("article write")) {
-				
-				articleController.doWrite();
+			if (cmdBits.length == 1) {
+				System.out.println("존재하지 않는 명령어입니다");
+				continue;
+			}
 
-			} else if (cmd.startsWith("article list")) {
-				
-				articleController.showList(cmd);
-				
-			} else if (cmd.startsWith("article detail ")) {
-				
-				articleController.showDetail(cmd);
+			String controllerName = cmdBits[0]; // article
+			String actionMehtodName = cmdBits[1]; // list
 
-			} else if (cmd.startsWith("article modify ")) {
-				
-				articleController.doModify(cmd);
+			Controller controller = null;
 
-			} else if (cmd.startsWith("article delete ")) {
-				
-				articleController.doDelete(cmd);
+			if (controllerName.equals("article")) {
+				controller = articleController;
+			} else if (controllerName.equals("member")) {
+				controller = memberController;
 				
 			} else {
-				System.out.println("없는 명령어입니다");
+				System.out.println("존재하지 않는 명령어입니다");
+				continue;
 			}
+			
+			controller.doAction(cmd, actionMehtodName);
 		}
 		sc.close();
 
